@@ -1,4 +1,8 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 // シーンの作成
 const scene = new THREE.Scene()
@@ -129,11 +133,81 @@ const loadPromises = flowerImages.map((imagePath, index) => {
     return loadFlowerImage(imagePath, index, flowerImages.length)
 })
 
+// スクロールアニメーション用の設定
+const SCROLL_CONFIG = {
+    // トリガー位置（ページの何%スクロールしたらアニメーション開始）
+    triggerPoint: '50%', // ページの50%スクロールしたら
+    // 各花の初期ポジション
+    initialPositions: [
+        { x: 0, y: 0, z: 1 },
+        { x: 2.5, y: 3, z: 0 },
+        { x: -1, y: 3, z: 1 },
+        { x: -3.5, y: 1.5, z: 0 },
+        { x: -3, y: -2, z: 0 },
+        { x: 0.5, y: 4, z: 0 },
+        { x: 3, y: 0, z: 0 },
+        { x: -0.5, y: -3, z: 0 },
+        { x: 2.5, y: -2.5, z: 0 }
+    ],
+    // 上方向への移動量（すべての花が同じ量だけ上に移動）
+    moveUpAmount: 12,
+    // y軸周りの回転角度（ラジアン）
+    rotationAngle: Math.PI / 3 // 60度
+}
+
 // すべての画像が読み込まれた後に実行
 Promise.all(loadPromises).then(() => {
-    // ここでポジションを変更可能
-    //   updateFlowerPosition(0, 0, 0, 0)
+    // ScrollTriggerアニメーションを設定
+    setupScrollAnimations()
 })
+
+// ScrollTriggerアニメーションを設定する関数
+function setupScrollAnimations() {
+    flowerMeshes.forEach((flowerData, index) => {
+        if (!SCROLL_CONFIG.initialPositions[index]) return
+
+        const initialPos = SCROLL_CONFIG.initialPositions[index]
+        const mesh = flowerData.mesh
+
+        // 初期ポジションを設定
+        mesh.position.set(
+            initialPos.x,
+            initialPos.y,
+            initialPos.z
+        )
+
+        // 初期回転を設定（0度から開始）
+        mesh.rotation.y = 0
+
+        // 目標ポジション（上方向に移動）
+        const targetY = initialPos.y + SCROLL_CONFIG.moveUpAmount
+
+        // ScrollTriggerでアニメーション（スクラブなし）
+        // 位置と回転を同時にアニメーション
+        gsap.to(mesh.position, {
+            y: targetY,
+            duration: 1.5, // アニメーション時間
+            ease: 'power2.out', // イージング
+            scrollTrigger: {
+                trigger: document.body,
+                start: `${SCROLL_CONFIG.triggerPoint} top`, // 指定した位置でトリガー
+                toggleActions: 'play reverse play reverse' // 可逆的に実行（スクロールダウンで再生、スクロールアップで逆再生）
+            }
+        })
+
+        // x軸周りの回転も同時にアニメーション
+        gsap.to(mesh.rotation, {
+            x: SCROLL_CONFIG.rotationAngle,
+            duration: 1.5, // アニメーション時間
+            ease: 'power2.out', // イージング
+            scrollTrigger: {
+                trigger: document.body,
+                start: `${SCROLL_CONFIG.triggerPoint} top`, // 指定した位置でトリガー
+                toggleActions: 'play reverse play reverse' // 可逆的に実行（スクロールダウンで再生、スクロールアップで逆再生）
+            }
+        })
+    })
+}
 
 // ポジションを変更する関数（後で呼び出し可能）
 function updateFlowerPosition(index, x, y, z) {
