@@ -1,26 +1,196 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three.js with Vite</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <script type="module" src="/src/main.js"></script>
-</body>
-</html>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js with Vite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .flower-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .flower-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .flower-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .flower-item h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="section">
+            <h1>🌸 花の世界へようこそ 🌸</h1>
+            <p>このページでは、美しい花々を3D空間で楽しむことができます。背景に表示されている花のアニメーションは、Three.jsを使用して作成されています。</p>
+            <p>スクロールして、様々な花の情報をご覧ください。</p>
+        </div>
+
+        <div class="section">
+            <h2>春の花々</h2>
+            <p>春は新しい生命が芽吹く季節です。桜、チューリップ、ヒヤシンスなど、色とりどりの花々が私たちの心を和ませてくれます。</p>
+            <p>春の花は、長い冬の後に訪れる希望の象徴でもあります。その美しさは、私たちに新しい始まりの喜びを与えてくれます。</p>
+        </div>
+
+        <div class="section">
+            <h2>夏の花々</h2>
+            <p>夏の太陽の下で咲く花々は、生命力に満ち溢れています。ひまわり、バラ、ラベンダーなど、鮮やかな色彩が特徴的です。</p>
+            <p>夏の花は、その力強い存在感で私たちを魅了します。暑い日差しの中でも美しく咲き誇る姿は、まさに自然の力強さの象徴です。</p>
+        </div>
+
+        <div class="section">
+            <h2>秋の花々</h2>
+            <p>秋は実りの季節であり、同時に美しい花々が咲く季節でもあります。コスモス、キク、ダリアなど、落ち着いた色合いが印象的です。</p>
+            <p>秋の花は、季節の移り変わりを感じさせてくれます。その優雅な美しさは、心に静かな感動を与えてくれます。</p>
+        </div>
+
+        <div class="section">
+            <h2>冬の花々</h2>
+            <p>冬の寒さの中でも、美しく咲く花々があります。スノードロップ、クリスマスローズ、シクラメンなど、厳しい季節を彩ります。</p>
+            <p>冬の花は、その可憐さと強さで私たちを驚かせます。雪の中に咲く花の美しさは、まさに奇跡のようです。</p>
+        </div>
+
+        <div class="section">
+            <h2>花の種類</h2>
+            <div class="flower-grid">
+                <div class="flower-item">
+                    <h3>バラ</h3>
+                    <p>愛と美の象徴として知られる、最も人気のある花の一つです。</p>
+                </div>
+                <div class="flower-item">
+                    <h3>チューリップ</h3>
+                    <p>春を代表する花で、様々な色と形があります。</p>
+                </div>
+                <div class="flower-item">
+                    <h3>ひまわり</h3>
+                    <p>太陽に向かって咲く、明るく力強い花です。</p>
+                </div>
+                <div class="flower-item">
+                    <h3>ラベンダー</h3>
+                    <p>美しい紫色と香りで知られる、癒しの花です。</p>
+                </div>
+                <div class="flower-item">
+                    <h3>コスモス</h3>
+                    <p>秋の風に揺れる、優雅で可憐な花です。</p>
+                </div>
+                <div class="flower-item">
+                    <h3>桜</h3>
+                    <p>日本の春を代表する、美しく儚い花です。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>花を育てる楽しみ</h2>
+            <p>花を育てることは、単に美しいものを育てるだけではありません。それは、自然との対話であり、時間をかけて成長を見守る喜びでもあります。</p>
+            <p>種をまき、水をやり、日々の成長を見守る。その過程で、私たちは自然の偉大さと、生命の力強さを実感することができます。</p>
+            <p>花が咲いた瞬間の喜びは、何ものにも代えがたいものです。それは、努力が実を結んだ瞬間であり、自然からの贈り物でもあります。</p>
+        </div>
+
+        <div class="section">
+            <h2>花と文化</h2>
+            <p>花は、世界中の様々な文化で重要な役割を果たしてきました。日本では、花見や生け花など、花を愛でる文化が発達しています。</p>
+            <p>西洋では、花言葉という文化があり、それぞれの花に特別な意味が込められています。バラは愛、ひまわりは憧れ、ラベンダーは沈黙など、花を通じて感情を表現することができます。</p>
+            <p>花は、私たちの生活に彩りを与え、心を豊かにしてくれる存在です。その美しさと香りは、私たちの日常に潤いをもたらしてくれます。</p>
+        </div>
+
+        <div class="section">
+            <h2>花の写真撮影</h2>
+            <p>花の美しさを写真に収めることは、多くの人々の趣味となっています。朝露に濡れた花、夕日に照らされた花、雨に打たれた花など、様々な表情を捉えることができます。</p>
+            <p>良い写真を撮るためには、光の使い方、構図、背景など、様々な要素を考慮する必要があります。しかし、最も大切なのは、花の美しさを心から愛でる気持ちです。</p>
+        </div>
+
+        <div class="section">
+            <h2>花の保存方法</h2>
+            <p>切り花を長持ちさせるためには、いくつかのコツがあります。まず、水を定期的に交換し、茎を斜めに切って水の吸収を良くします。</p>
+            <p>また、直射日光を避け、涼しい場所に置くことも重要です。花によって最適な環境は異なりますが、基本的なケアを心がけることで、より長く美しさを楽しむことができます。</p>
+        </div>
+
+        <div class="section">
+            <h2>花の贈り物</h2>
+            <p>花は、特別な人への贈り物としても最適です。誕生日、記念日、感謝の気持ちを伝えたい時など、様々な場面で花は私たちの気持ちを代弁してくれます。</p>
+            <p>花を贈ることで、言葉では伝えきれない感情を表現することができます。その美しさと香りは、受け取った人の心を温かくしてくれます。</p>
+        </div>
+
+        <div class="section">
+            <h2>まとめ</h2>
+            <p>花は、私たちの生活に欠かせない存在です。その美しさ、香り、そして生命の力強さは、私たちに多くのことを教えてくれます。</p>
+            <p>このページの背景に表示されている3Dアニメーションのように、花は様々な形で私たちを楽しませてくれます。ぜひ、身の回りの花々にも目を向けてみてください。</p>
+            <p>自然が作り出す美しさは、いつも私たちを驚かせ、感動させてくれます。花を通じて、その美しさを感じ取ることができるのです。</p>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
