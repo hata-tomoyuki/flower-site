@@ -209,30 +209,6 @@ function setupScrollAnimations() {
     })
 }
 
-// ポジションを変更する関数（後で呼び出し可能）
-function updateFlowerPosition(index, x, y, z) {
-    if (flowerMeshes[index]) {
-        flowerMeshes[index].mesh.position.set(x, y, z)
-        // 初期ポジションも更新（必要に応じて）
-        if (flowerMeshes[index].initialPosition) {
-            flowerMeshes[index].initialPosition = { x, y, z }
-        }
-    } else {
-        console.warn(`Flower mesh at index ${index} is not loaded yet.`)
-    }
-}
-
-// すべてのポジションを再計算して更新する関数
-function updateAllPositions() {
-    flowerMeshes.forEach((flowerData, index) => {
-        const position = calculatePosition(index, flowerImages.length)
-        flowerData.mesh.position.set(position.x, position.y, position.z)
-        if (flowerData.initialPosition) {
-            flowerData.initialPosition = { ...position }
-        }
-    })
-}
-
 // 歪みアニメーション関数
 function distortGeometry() {
     // すべてのメッシュに歪みを適用
