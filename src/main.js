@@ -152,7 +152,7 @@ const SCROLL_CONFIG = {
     // 上方向への移動量（すべての花が同じ量だけ上に移動）
     moveUpAmount: 12,
     // y軸周りの回転角度（ラジアン）
-    rotationAngle: Math.PI / 3 // 60度
+    rotationAngle: Math.PI / 2 // 90度
 }
 
 // すべての画像が読み込まれた後に実行
@@ -186,6 +186,7 @@ function setupScrollAnimations() {
         // 位置と回転を同時にアニメーション
         gsap.to(mesh.position, {
             y: targetY,
+
             duration: 1.5, // アニメーション時間
             ease: 'power2.out', // イージング
             scrollTrigger: {
