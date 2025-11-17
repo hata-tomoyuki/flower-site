@@ -152,14 +152,54 @@ const SCROLL_CONFIG = {
     // 上方向への移動量（すべての花が同じ量だけ上に移動）
     moveUpAmount: 12,
     // y軸周りの回転角度（ラジアン）
-    rotationAngle: Math.PI / 2 // 90度
+    rotationAngle: Math.PI / 2, // 90度
+    // 画面下から現れる花の設定
+    newFlower: {
+        startY: -8, // 画面下の開始位置
+        endY: 0, // 表示される位置
+        imageIndex: 0 // 使用する画像のインデックス（flower1.pngを使用）
+    }
 }
+
+// 画面下から現れる新しい花のメッシュ
+let newFlowerMesh = null
 
 // すべての画像が読み込まれた後に実行
 Promise.all(loadPromises).then(() => {
+    // 画面下から現れる新しい花を作成
+    createNewFlower()
     // ScrollTriggerアニメーションを設定
     setupScrollAnimations()
 })
+
+// 画面下から現れる新しい花を作成する関数
+function createNewFlower() {
+    const config = SCROLL_CONFIG.newFlower
+    const flowerData = flowerMeshes[config.imageIndex]
+
+    if (!flowerData) return
+
+    // 既存の花を複製して新しい花を作成
+    const originalMesh = flowerData.mesh
+    newFlowerMesh = originalMesh.clone()
+
+    // 初期位置を画面下に設定
+    newFlowerMesh.position.set(
+        0, // x座標（中央）
+        config.startY, // y座標（画面下）
+        0 // z座標
+    )
+
+    // 初期状態：透明で小さく
+    newFlowerMesh.material = originalMesh.material.clone()
+    newFlowerMesh.material.opacity = 0
+    newFlowerMesh.material.transparent = true
+    newFlowerMesh.scale.set(0.5, 0.5, 0.5)
+    newFlowerMesh.rotation.set(0, 0, 0)
+
+    // シーンに追加
+    scene.add(newFlowerMesh)
+}
 
 // ScrollTriggerアニメーションを設定する関数
 function setupScrollAnimations() {
@@ -208,6 +248,49 @@ function setupScrollAnimations() {
             }
         })
     })
+
+    // 画面下から現れる新しい花のアニメーション
+    if (newFlowerMesh) {
+        const config = SCROLL_CONFIG.newFlower
+
+        // 位置アニメーション（画面下から上に移動）
+        gsap.to(newFlowerMesh.position, {
+            y: config.endY,
+            duration: 1.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: document.body,
+                start: `${SCROLL_CONFIG.triggerPoint} top`,
+                toggleActions: 'play reverse play reverse'
+            }
+        })
+
+        // 透明度アニメーション（現れる）
+        gsap.to(newFlowerMesh.material, {
+            opacity: 1,
+            duration: 1.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: document.body,
+                start: `${SCROLL_CONFIG.triggerPoint} top`,
+                toggleActions: 'play reverse play reverse'
+            }
+        })
+
+        // スケールアニメーション（拡大して現れる）
+        gsap.to(newFlowerMesh.scale, {
+            x: 1,
+            y: 1,
+            z: 1,
+            duration: 1.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: document.body,
+                start: `${SCROLL_CONFIG.triggerPoint} top`,
+                toggleActions: 'play reverse play reverse'
+            }
+        })
+    }
 }
 
 // 歪みアニメーション関数
@@ -238,6 +321,36 @@ function distortGeometry() {
         positions.needsUpdate = true
         geometry.computeVertexNormals()
     })
+
+    // 新しい花にも歪みを適用（存在する場合）
+    if (newFlowerMesh) {
+        const flowerData = flowerMeshes[SCROLL_CONFIG.newFlower.imageIndex]
+        if (flowerData) {
+            const { geometry, originalPositions } = flowerData
+            const positions = geometry.attributes.position
+
+            // 各頂点を歪ませる
+            for (let i = 0; i < positions.count; i++) {
+                const i3 = i * 3
+
+                // 元の位置を取得
+                const originalX = originalPositions[i3]
+                const originalY = originalPositions[i3 + 1]
+                const originalZ = originalPositions[i3 + 2]
+
+                // 波のような歪み効果
+                const waveX = Math.sin(originalX * 2 + time * 2) * 0.05
+                const waveY = Math.cos(originalY * 2 + time * 2) * 0.05
+
+                // 頂点位置を更新
+                positions.setXYZ(i, originalX + waveX, originalY + waveY, originalZ)
+            }
+
+            // 法線を再計算
+            positions.needsUpdate = true
+            geometry.computeVertexNormals()
+        }
+    }
 }
 
 // アニメーションループ
