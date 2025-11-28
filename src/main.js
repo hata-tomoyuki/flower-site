@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 // シーンの作成
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(0x87ceeb)
+scene.background = new THREE.Color(0xffffff)
 
 // カメラの作成
 const camera = new THREE.PerspectiveCamera(

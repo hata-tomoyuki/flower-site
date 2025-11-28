@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "gsap": "^3.13.0",
+    "gifuct-js": "^2.1.2",
     "three": "^0.169.0"
   },
   "devDependencies": {
