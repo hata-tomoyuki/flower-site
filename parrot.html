@@ -14,17 +14,90 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #000;
-            overflow: hidden;
+            color: #333;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         canvas {
             display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 
 <body>
+    <div class="content">
+        <div class="section">
+            <h1>🦜 オウムのアニメーション 🦜</h1>
+            <p>このページでは、美しいオウムのGIFアニメーションを3D空間で楽しむことができます。スクロールして、アニメーションをご覧ください。</p>
+        </div>
+
+        <div class="section">
+            <h2>オウムについて</h2>
+            <p>オウムは、鮮やかな色彩と知的な行動で知られる鳥類です。多くの種類が存在し、それぞれ独自の特徴を持っています。</p>
+            <p>オウムは非常に社交的で、群れで生活することが多いです。また、優れた学習能力を持ち、言葉を覚えることもできます。</p>
+        </div>
+
+        <div class="section">
+            <h2>オウムの種類</h2>
+            <p>世界には約350種類以上のオウムが存在します。それぞれが独特の色や模様を持ち、美しい姿を見せてくれます。</p>
+            <p>大型のオウムから小型のオウムまで、様々なサイズの種類があります。それぞれが異なる環境に適応して進化してきました。</p>
+        </div>
+
+        <div class="section">
+            <h2>オウムの生態</h2>
+            <p>オウムは主に熱帯や亜熱帯地域に生息しています。果実、種子、花などを食べる雑食性の鳥です。</p>
+            <p>多くのオウムは長寿で、適切な環境では数十年生きることができます。そのため、ペットとして飼育されることも多いです。</p>
+        </div>
+
+        <div class="section">
+            <h2>オウムの保護</h2>
+            <p>多くのオウムの種類が絶滅の危機に瀕しています。生息地の破壊や密猟が主な原因です。</p>
+            <p>オウムを保護するためには、生息地の保護や適切な管理が重要です。私たち一人ひとりが意識を持つことが大切です。</p>
+        </div>
+    </div>
     <script type="module" src="/src/parrot.js"></script>
 </body>
 
